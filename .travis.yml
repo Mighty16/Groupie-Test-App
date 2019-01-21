@@ -1,0 +1,9 @@
+language: android
+
+android:
+  components:
+  - android-28
+  - extra-android-m2repository
+
+  script:
+  - ./gradlew assembleDebug
