@@ -5,8 +5,8 @@ android:
   - android-28
   - extra-android-m2repository
 
-before_install:
-- yes | sdkmanager "platforms;android-28"
+  before_install:
+  - yes | sdkmanager "platforms;android-28"
 
   script:
   - ./gradlew assembleDebug
