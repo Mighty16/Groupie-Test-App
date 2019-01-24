@@ -5,8 +5,10 @@ android:
   - android-28
   - extra-android-m2repository
 
-  before_install:
-  - yes | sdkmanager "platforms;android-28"
+  licenses:
+  - android-sdk-preview-license-.+
+  - android-sdk-license-.+
+  - google-gdk-license-.+
 
   script:
   - ./gradlew assembleDebug
