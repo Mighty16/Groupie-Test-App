@@ -19,6 +19,12 @@ data class PostEntity(
     val userId: Int,
     val id: Int,
     val title: String,
-    val body: String
-)
+    val body: String,
+    val color: Int){
+
+    companion object {
+        const val COLORS_COUNT = 5
+    }
+
+}
 

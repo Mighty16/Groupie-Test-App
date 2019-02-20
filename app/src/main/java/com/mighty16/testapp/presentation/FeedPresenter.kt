@@ -5,8 +5,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class FeedPresenter(private val interactor: FeedInteractorContract) : BasePresenter<FeedView>() {
+
+    private val mapper: FeedViewDataMapper = FeedViewDataMapper()
 
     private var currentPostsPage: Int = 0
 
@@ -37,12 +40,17 @@ class FeedPresenter(private val interactor: FeedInteractorContract) : BasePresen
     private fun getPostsPage(page: Int) {
         view?.showFeedLoading(true)
         GlobalScope.launch(Dispatchers.Main) {
-            val resultPage = withContext(Dispatchers.IO) {
-                interactor.getFeedPage(page)
-            }
-            doWhenViewAttached {
-                view?.showFeedLoading(false)
-                view?.showFeedPage(resultPage)
+            try {
+                val resultPage = withContext(Dispatchers.IO) { mapper.map(interactor.getFeedPage(page)) }
+                doWhenViewAttached {
+                    view?.showFeedLoading(false)
+                    view?.showFeedPage(resultPage)
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                doWhenViewAttached {
+                    view?.showFeedPageError(ex)
+                }
             }
         }
     }

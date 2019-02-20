@@ -43,7 +43,8 @@ class TestRepository : RepositoryContract {
             userId = TEST_USER_ID,
             id = id,
             title = title,
-            body = body
+            body = body,
+            color = 0
         )
     }
 

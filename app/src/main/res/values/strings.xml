@@ -3,4 +3,7 @@
     <string name="toolbar_title">Groupie Test</string>
     <string name="unknown_error">Unknown error</string>
     <string name="menu_clear">Clear List</string>
+
+    <string name="empty_view_text">No data to show.</string>
+    <string name="empty_view_button_text">LOAD DATA</string>
 </resources>
