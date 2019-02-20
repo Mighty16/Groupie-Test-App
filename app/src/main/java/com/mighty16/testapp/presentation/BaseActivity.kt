@@ -13,12 +13,9 @@ abstract class BaseActivity<P : BasePresenter<V>, V> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         presenter = lastCustomNonConfigurationInstance?.let {
             it as P
         } ?: createPresenter()
-
-
     }
 
     abstract fun createPresenter(): P
@@ -54,6 +51,4 @@ abstract class BaseActivity<P : BasePresenter<V>, V> : AppCompatActivity() {
     fun errorToast(error: Throwable) {
         Toast.makeText(this, error.message ?: getString(R.string.unknown_error), Toast.LENGTH_SHORT).show()
     }
-
-
 }

@@ -1,35 +1,35 @@
 package com.mighty16.testapp.presentation
 
+import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 
-class FeedAdapter : GroupAdapter<ViewHolder>() {
+class FeedAdapter(photosHeaderListener: PhotosHeaderItem.PhotosHeaderListener) : GroupAdapter<ViewHolder>() {
 
-    private val photosSection = Section()
+    private val photosHeaderItem = PhotosHeaderItem(photosHeaderListener)
+    private val photosSection = Section().apply {
+        setHeader(photosHeaderItem)
+    }
+
+    fun insertItem(index: Int, item: FeedListItem) {
+        add((index - photosSection.itemCount)+1, item)
+    }
 
     fun updateData(data: FeedPageViewData) {
-        if (itemCount == 0) {
-            if (data.photos.isNotEmpty()) {
-                photosSection.addAll(data.photos)
-                add(photosSection)
-                addAll(data.posts)
-            }
-            return
-        }
-
+        val newItems: MutableList<Group> = mutableListOf(photosSection)
+        newItems.addAll(data.posts)
         photosSection.update(data.photos)
-        //update( data.posts)
+        update(newItems)
     }
 
     fun updatePhotosItem(photoItems: List<FeedListItem>) {
-        val section = Section()
-        section.addAll(photoItems)
-        if (getAdapterPosition(section) == -1) {
-            add(section)
-        } else {
-            update(photoItems)
-        }
+        photosSection.update(photoItems)
+    }
+
+    fun showPhotosRefreshing(show: Boolean) {
+        photosHeaderItem.isLoading = show
+        photosSection.notifyItemChanged(0)
     }
 
     fun showLoading(show: Boolean) {
@@ -47,5 +47,4 @@ class FeedAdapter : GroupAdapter<ViewHolder>() {
             }
         }
     }
-
 }

@@ -13,20 +13,40 @@ class FeedPresenter(private val interactor: FeedInteractorContract) : BasePresen
 
     private var currentPostsPage: Int = 0
 
+    private var lastRemovedIndex: Int = -1
+    private var lastRemovedItem: FeedListItem? = null
+
+    private lateinit var currentViewData: FeedPageViewData
+
     override fun onViewReady() {
         getPostsPage(currentPostsPage)
     }
 
-    fun onFeedEndReached() {
-
+    fun onFeedItemRemoved(item: FeedListItem, index: Int) {
+        lastRemovedItem = item
+        lastRemovedIndex = index
+        view?.showItemRemoved(item, index)
     }
 
-    fun onUpdatePhotosClicked() {
-
+    fun onUndoClicked() {
+        lastRemovedItem?.let {
+            view?.showItemRestored(it, lastRemovedIndex)
+        }
     }
 
-    fun onCreateFeedClicked() {
-
+    fun onRefreshPhotosClicked() {
+        view?.showPhotoRefreshing(true)
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                val photos = withContext(Dispatchers.IO) { interactor.getPhotos().map { PhotoItem(it) } }
+                doWhenViewAttached {
+                    view?.showPhotoRefreshing(false)
+                    view?.showPhotos(photos)
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
     }
 
     fun onClearButtonClicked() {
@@ -41,10 +61,10 @@ class FeedPresenter(private val interactor: FeedInteractorContract) : BasePresen
         view?.showFeedLoading(true)
         GlobalScope.launch(Dispatchers.Main) {
             try {
-                val resultPage = withContext(Dispatchers.IO) { mapper.map(interactor.getFeedPage(page)) }
+                currentViewData = withContext(Dispatchers.IO) { mapper.map(interactor.getFeedPage(page)) }
                 doWhenViewAttached {
                     view?.showFeedLoading(false)
-                    view?.showFeedPage(resultPage)
+                    view?.showFeedPage(currentViewData)
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()

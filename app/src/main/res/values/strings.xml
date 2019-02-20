@@ -6,4 +6,11 @@
 
     <string name="empty_view_text">No data to show.</string>
     <string name="empty_view_button_text">LOAD DATA</string>
+
+    <string name="photos_header_title">Photos</string>
+    <string name="photos_header_refresh_button_description">Refresh photos</string>
+
+    <string name="removed_item_notification_text">Item %s removed</string>
+    <string name="removed_item_undo_text">UNDO</string>
+
 </resources>

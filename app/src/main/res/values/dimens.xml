@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="photos_header_padding">8dp</dimen>
+    <dimen name="photos_header_title_text_size">16sp</dimen>
+    <dimen name="photos_header_refresh_button_size">32dp</dimen>
+    <dimen name="photos_header_refresh_button_padding">4dp</dimen>
+
+</resources>
