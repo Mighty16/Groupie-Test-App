@@ -14,7 +14,7 @@ coveralls {
 }
 
 tasks.coveralls {
-    dependsOn 'connectedAndroidTest'
+    dependsOn 'jacocoTestReport'
     onlyIf { System.env.'CI' }
 }
 
