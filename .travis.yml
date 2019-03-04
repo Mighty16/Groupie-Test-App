@@ -13,9 +13,9 @@ android:
   - google-gdk-license-.+
 
 
-  before_install:
+before_install:
   - yes | sdkmanager "platforms;android-28"
 
-  script:
+script:
   - ./gradlew assembleDebug
   - ./gradlew jacocoTestReport coveralls
