@@ -1,13 +1,13 @@
 package com.mighty16.testapp.presentation
 
 import com.mighty16.testapp.domain.FeedInteractorContract
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.lang.Exception
 
-class FeedPresenter(private val interactor: FeedInteractorContract) : BasePresenter<FeedView>() {
+open class FeedPresenter(
+    private val interactor: FeedInteractorContract,
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+) : BasePresenter<FeedView>() {
 
     private val mapper: FeedViewDataMapper = FeedViewDataMapper()
 
@@ -36,7 +36,7 @@ class FeedPresenter(private val interactor: FeedInteractorContract) : BasePresen
 
     fun onRefreshPhotosClicked() {
         view?.showPhotoRefreshing(true)
-        GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(uiDispatcher) {
             try {
                 val photos = withContext(Dispatchers.IO) { interactor.getPhotos().map { PhotoItem(it) } }
                 doWhenViewAttached {
@@ -59,7 +59,7 @@ class FeedPresenter(private val interactor: FeedInteractorContract) : BasePresen
 
     private fun getPostsPage(page: Int) {
         view?.showFeedLoading(true)
-        GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(uiDispatcher) {
             try {
                 currentViewData = withContext(Dispatchers.IO) { mapper.map(interactor.getFeedPage(page)) }
                 doWhenViewAttached {
