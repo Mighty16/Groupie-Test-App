@@ -142,4 +142,8 @@ class MainActivity : BaseActivity<FeedPresenter, FeedView>(),
     override fun showItemRestored(restoredItem: FeedListItem, index: Int) {
         adapter.insertItem(index, restoredItem)
     }
+
+    override fun showPhotosRefreshingError(error: Throwable) {
+        errorToast(error)
+    }
 }

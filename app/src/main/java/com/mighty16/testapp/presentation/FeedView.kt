@@ -9,6 +9,7 @@ interface FeedView {
     fun showPhotos(photos: List<PhotoItem>)
     fun showEmptyList()
     fun showPhotoRefreshing(show: Boolean)
+    fun showPhotosRefreshingError(error:Throwable)
     fun showItemRemoved(removedItem: FeedListItem, index: Int)
     fun showItemRestored(restoredItem: FeedListItem, index: Int)
 

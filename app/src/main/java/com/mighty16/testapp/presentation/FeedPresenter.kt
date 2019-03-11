@@ -6,16 +6,14 @@ import java.lang.Exception
 
 open class FeedPresenter(
     private val interactor: FeedInteractorContract,
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val bgDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BasePresenter<FeedView>() {
 
     private val mapper: FeedViewDataMapper = FeedViewDataMapper()
-
     private var currentPostsPage: Int = 0
-
     private var lastRemovedIndex: Int = -1
     private var lastRemovedItem: FeedListItem? = null
-
     private lateinit var currentViewData: FeedPageViewData
 
     override fun onViewReady() {
@@ -38,13 +36,17 @@ open class FeedPresenter(
         view?.showPhotoRefreshing(true)
         GlobalScope.launch(uiDispatcher) {
             try {
-                val photos = withContext(Dispatchers.IO) { interactor.getPhotos().map { PhotoItem(it) } }
-                doWhenViewAttached {
-                    view?.showPhotoRefreshing(false)
-                    view?.showPhotos(photos)
+                val photos = withContext(bgDispatcher) { interactor.getPhotos().map { PhotoItem(it) } }
+                doWhenViewAttached {view->
+                    view.showPhotoRefreshing(false)
+                    view.showPhotos(photos)
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
+                doWhenViewAttached {view->
+                    view.showPhotoRefreshing(false)
+                    view.showPhotosRefreshingError(ex)
+                }
             }
         }
     }
@@ -61,15 +63,15 @@ open class FeedPresenter(
         view?.showFeedLoading(true)
         GlobalScope.launch(uiDispatcher) {
             try {
-                currentViewData = withContext(Dispatchers.IO) { mapper.map(interactor.getFeedPage(page)) }
+                currentViewData = withContext(bgDispatcher) { mapper.map(interactor.getFeedPage(page)) }
                 doWhenViewAttached {
                     view?.showFeedLoading(false)
                     view?.showFeedPage(currentViewData)
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()
-                doWhenViewAttached {
-                    view?.showFeedPageError(ex)
+                doWhenViewAttached {view->
+                    view.showFeedPageError(ex)
                 }
             }
         }

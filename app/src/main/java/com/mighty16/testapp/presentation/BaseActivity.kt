@@ -16,6 +16,7 @@ abstract class BaseActivity<P : BasePresenter<V>, V> : AppCompatActivity() {
         presenter = lastCustomNonConfigurationInstance?.let {
             it as P
         } ?: createPresenter()
+        presenter.onViewReady()
     }
 
     abstract fun createPresenter(): P
