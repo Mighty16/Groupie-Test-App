@@ -1,5 +1,5 @@
 # Groupie Test App
-[![Build Status](https://travis-ci.org/Mighty16/Groupie-Test-App.svg?branch=master)](https://travis-ci.org/Mighty16/Groupie-Test-App) [![Coverage Status](https://coveralls.io/repos/github/Mighty16/Groupie-Test-App/badge.svg?branch=master)](https://coveralls.io/github/Mighty16/Groupie-Test-App?branch=master)
+[![Build Status](https://travis-ci.org/Mighty16/Groupie-Test-App.svg?branch=master)](https://travis-ci.org/Mighty16/Groupie-Test-App) [![Coverage Status](https://coveralls.io/repos/github/Mighty16/Groupie-Test-App/badge.svg?branch=master)](https://coveralls.io/github/Mighty16/Groupie-Test-App?branch=master&kill_cache=1)
 
 A simple test application which uses **groupie** (https://github.com/lisawray/groupie) for displaying list of demo items.
 
